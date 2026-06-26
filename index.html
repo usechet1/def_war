@@ -7,74 +7,53 @@
 <script src="chart.js"></script>
 <style>
   :root {
-    --bg:#0d1117; --surface:#161b22; --border:#30363d;
-    --text:#e6edf3; --muted:#8b949e;
-    --accent:#e36414; --accent2:#f4a261;
+    --bg:#0d1117;--surface:#161b22;--border:#30363d;
+    --text:#e6edf3;--muted:#8b949e;
+    --accent:#e36414;--accent2:#f4a261;
     --font:'Segoe UI',system-ui,sans-serif;
   }
-  *{ box-sizing:border-box; margin:0; padding:0; }
-  body{ background:var(--bg); color:var(--text); font-family:var(--font); min-height:100vh; padding:14px; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;padding:14px}
 
-  .tabs-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; margin-bottom:18px; }
-  .tabs-wrap::-webkit-scrollbar{ display:none; }
-  .tabs{ display:flex; width:max-content; border-radius:10px; overflow:hidden; border:1px solid var(--border); }
-  .tab-btn{
-    padding:10px 14px; font-size:0.82rem; font-weight:600;
-    cursor:pointer; border:none; background:var(--surface);
-    color:var(--muted); white-space:nowrap; transition:background 0.18s,color 0.18s;
-  }
-  .tab-btn+.tab-btn{ border-left:1px solid var(--border); }
-  .tab-lbl{ display:none; }
-  @media(min-width:640px){ .tab-lbl{ display:inline; } }
+  .tabs-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:18px}
+  .tabs-wrap::-webkit-scrollbar{display:none}
+  .tabs{display:flex;width:max-content;border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+  .tab-btn{padding:10px 14px;font-size:0.82rem;font-weight:600;cursor:pointer;border:none;background:var(--surface);color:var(--muted);white-space:nowrap;transition:background .18s,color .18s}
+  .tab-btn+.tab-btn{border-left:1px solid var(--border)}
+  .tab-lbl{display:none}
+  @media(min-width:640px){.tab-lbl{display:inline}}
 
-  header{ border-left:4px solid var(--accent); padding-left:14px; margin-bottom:18px; transition:border-color 0.3s; }
-  header h1{ font-size:1.2rem; font-weight:700; letter-spacing:-0.02em; }
-  header p{ color:var(--muted); font-size:0.78rem; margin-top:3px; }
+  header{border-left:4px solid var(--accent);padding-left:14px;margin-bottom:18px;transition:border-color .3s}
+  header h1{font-size:1.2rem;font-weight:700;letter-spacing:-.02em}
+  header p{color:var(--muted);font-size:.78rem;margin-top:3px}
 
-  .filters{
-    display:grid; grid-template-columns:1fr 1fr;
-    gap:10px; background:var(--surface); border:1px solid var(--border);
-    border-radius:10px; padding:14px; margin-bottom:14px;
-  }
-  @media(min-width:640px){ .filters{ grid-template-columns:repeat(5,1fr); padding:18px; } }
-  .filter-group{ display:flex; flex-direction:column; gap:5px; }
-  .filter-group.full{ grid-column:1/-1; }
-  label{ font-size:0.68rem; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:var(--muted); }
-  select{
-    background:var(--bg); border:1px solid var(--border); border-radius:6px;
-    color:var(--text); padding:7px 8px; font-size:0.82rem;
-    cursor:pointer; outline:none; width:100%; transition:border-color 0.15s;
-  }
-  select:focus{ border-color:var(--accent); }
+  .filters{display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px}
+  @media(min-width:640px){.filters{grid-template-columns:repeat(5,1fr);padding:18px}}
+  .filter-group{display:flex;flex-direction:column;gap:5px}
+  .filter-group.full{grid-column:1/-1}
+  label{font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  select{background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:7px 8px;font-size:.82rem;cursor:pointer;outline:none;width:100%;transition:border-color .15s}
+  select:focus{border-color:var(--accent)}
 
-  .metric-toggle{ display:none; gap:8px; margin-bottom:14px; }
-  .metric-toggle.visible{ display:flex; }
-  .metric-btn{
-    padding:7px 16px; font-size:0.82rem; font-weight:600;
-    border-radius:6px; border:1px solid var(--border);
-    background:var(--surface); color:var(--muted); cursor:pointer; transition:all 0.15s;
-  }
-  .metric-btn.active{ background:rgba(220,38,38,0.2); color:#f87171; border-color:rgba(220,38,38,0.4); }
+  .metric-toggle{display:none;gap:8px;margin-bottom:14px}
+  .metric-toggle.visible{display:flex}
+  .metric-btn{padding:7px 16px;font-size:.82rem;font-weight:600;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s}
+  .metric-btn.active{background:rgba(220,38,38,.2);color:#f87171;border-color:rgba(220,38,38,.4)}
 
-  .stats-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
-  @media(min-width:640px){ .stats-row{ grid-template-columns:repeat(4,1fr); gap:12px; } }
-  .stat-card{ background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:12px 14px; }
-  .stat-card .val{ font-size:1.45rem; font-weight:700; color:var(--accent2); line-height:1; transition:color 0.3s; }
-  .stat-card .lbl{ font-size:0.67rem; color:var(--muted); margin-top:4px; text-transform:uppercase; letter-spacing:0.06em; }
+  .stats-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+  @media(min-width:640px){.stats-row{grid-template-columns:repeat(4,1fr);gap:12px}}
+  .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+  .stat-card .val{font-size:1.45rem;font-weight:700;color:var(--accent2);line-height:1;transition:color .3s}
+  .stat-card .lbl{font-size:.67rem;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
 
-  .loading{ text-align:center; padding:40px; color:var(--muted); font-size:0.9rem; }
-  .chart-wrap{
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:10px; padding:14px; position:relative; min-height:260px;
-  }
-  @media(min-width:640px){ .chart-wrap{ padding:22px; min-height:340px; } }
-  .chart-title{ font-size:0.73rem; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px; }
-  #nodata{
-    display:none; position:absolute; inset:0;
-    align-items:center; justify-content:center;
-    color:var(--muted); font-size:0.9rem; flex-direction:column; gap:8px;
-  }
-  #nodata .icon{ font-size:2rem; opacity:0.4; }
+  .chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;position:relative;min-height:260px}
+  @media(min-width:640px){.chart-wrap{padding:22px;min-height:340px}}
+  .chart-title{font-size:.73rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+  .loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.9rem;flex-direction:column;gap:8px}
+  .loading .spin{width:28px;height:28px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #nodata{display:none;position:absolute;inset:0;align-items:center;justify-content:center;color:var(--muted);font-size:.9rem;flex-direction:column;gap:8px}
+  #nodata .icon{font-size:2rem;opacity:.4}
 </style>
 </head>
 <body>
@@ -82,13 +61,16 @@
 <div class="tabs-wrap">
   <div class="tabs">
     <button class="tab-btn" id="btn-eln" onclick="switchTab('eln')">🟠<span class="tab-lbl"> Desmovilizados ELN</span></button>
-  <button class="tab-btn" id="btn-ter" onclick="switchTab('ter')">🟢<span class="tab-lbl"> Terrorismo</span></button>
-  <button class="tab-btn" id="btn-sec" onclick="switchTab('sec')">⚪<span class="tab-lbl"> Secuestro</span></button>
-  <button class="tab-btn" id="btn-ext" onclick="switchTab('ext')">🟤<span class="tab-lbl"> Extorsión</span></button>
-  <button class="tab-btn" id="btn-err" onclick="switchTab('err')">🌿<span class="tab-lbl"> Erradicación</span></button>
-  <button class="tab-btn" id="btn-des" onclick="switchTab('des')">🟠<span class="tab-lbl"> Desvinculados</span></button>
-  <button class="tab-btn" id="btn-som" onclick="switchTab('som')">🔶<span class="tab-lbl"> Sometidos</span></button>
-  <button class="tab-btn" id="btn-mas" onclick="switchTab('mas')">🔴<span class="tab-lbl"> Masacres</span></button>
+    <button class="tab-btn" id="btn-ter" onclick="switchTab('ter')">🟢<span class="tab-lbl"> Terrorismo</span></button>
+    <button class="tab-btn" id="btn-sec" onclick="switchTab('sec')">⚪<span class="tab-lbl"> Secuestro</span></button>
+    <button class="tab-btn" id="btn-ext" onclick="switchTab('ext')">🟤<span class="tab-lbl"> Extorsión</span></button>
+    <button class="tab-btn" id="btn-err" onclick="switchTab('err')">🌿<span class="tab-lbl"> Erradicación</span></button>
+    <button class="tab-btn" id="btn-des" onclick="switchTab('des')">🟠<span class="tab-lbl"> Desvinculados</span></button>
+    <button class="tab-btn" id="btn-som" onclick="switchTab('som')">🔶<span class="tab-lbl"> Sometidos</span></button>
+    <button class="tab-btn" id="btn-mas" onclick="switchTab('mas')">🔴<span class="tab-lbl"> Masacres</span></button>
+    <button class="tab-btn" id="btn-inv" onclick="switchTab('inv')">🟣<span class="tab-lbl"> Invasión de Tierras</span></button>
+    <button class="tab-btn" id="btn-asp" onclick="switchTab('asp')">🔵<span class="tab-lbl"> Aspersión</span></button>
+    <button class="tab-btn" id="btn-hom" onclick="switchTab('hom')">🩸<span class="tab-lbl"> Homicidio</span></button>
   </div>
 </div>
 
@@ -119,9 +101,9 @@
 
 <div class="chart-wrap">
   <div class="chart-title" id="chartTitle"></div>
+  <div class="loading" id="loading"><div class="spin"></div><span>Cargando datos...</span></div>
   <div id="nodata"><span class="icon">📭</span><span>Sin datos</span></div>
-  <div class="loading" id="loading">Cargando datos...</div>
-  <canvas id="chart" style="display:none"></canvas>
+  <canvas id="chart"></canvas>
 </div>
 
 <script>
@@ -134,181 +116,177 @@ const META = {
   err: {accent:'#4a7c3f',accent2:'#6aaf5e',gradA:'rgba(74,124,63,0.35)',gradB:'rgba(74,124,63,0.0)',tabBg:'rgba(74,124,63,0.22)',title:'Erradicación',sub:'Erradicación de cultivos · Colombia',lbl:'Total hectáreas',unit:'ha',tipo:'std'},
   des: {accent:'#f97316',accent2:'#fdba74',gradA:'rgba(249,115,22,0.35)',gradB:'rgba(249,115,22,0.0)',tabBg:'rgba(249,115,22,0.20)',title:'Desvinculados',sub:'Desvinculados · Colombia',lbl:'Total desvinculados',unit:'desvinculados',tipo:'std'},
   som: {accent:'#fb923c',accent2:'#fed7aa',gradA:'rgba(251,146,60,0.35)',gradB:'rgba(251,146,60,0.0)',tabBg:'rgba(251,146,60,0.20)',title:'Sometidos',sub:'Sometidos · Colombia',lbl:'Total sometidos',unit:'sometidos',tipo:'std'},
-  mas: {accent:'#dc2626',accent2:'#f87171',gradA:'rgba(220,38,38,0.35)',gradB:'rgba(220,38,38,0.0)',tabBg:'rgba(220,38,38,0.18)',title:'Masacres',sub:'Masacres · Colombia',lbl:'Total casos',unit:'casos',tipo:'mas'}
+  mas: {accent:'#dc2626',accent2:'#f87171',gradA:'rgba(220,38,38,0.35)',gradB:'rgba(220,38,38,0.0)',tabBg:'rgba(220,38,38,0.18)',title:'Masacres',sub:'Masacres · Colombia',lbl:'Total casos',unit:'casos',tipo:'mas'},
+  inv: {accent:'#7c3aed',accent2:'#a78bfa',gradA:'rgba(124,58,237,0.35)',gradB:'rgba(124,58,237,0.0)',tabBg:'rgba(124,58,237,0.20)',title:'Invasión de Tierras',sub:'Invasión de tierras · Colombia',lbl:'Total casos',unit:'casos',tipo:'std'},
+  asp: {accent:'#0ea5e9',accent2:'#7dd3fc',gradA:'rgba(14,165,233,0.35)',gradB:'rgba(14,165,233,0.0)',tabBg:'rgba(14,165,233,0.20)',title:'Aspersión',sub:'Aspersión aérea · Colombia',lbl:'Total hectáreas',unit:'ha',tipo:'std'},
+  hom: {accent:'#be123c',accent2:'#fb7185',gradA:'rgba(190,18,60,0.35)',gradB:'rgba(190,18,60,0.0)',tabBg:'rgba(190,18,60,0.20)',title:'Homicidio',sub:'Homicidio intencional · Colombia',lbl:'Total víctimas',unit:'víctimas',tipo:'std'}
 };
 
-const LOADED = {};
-let currentTab = 'eln', currentMetric = 'casos';
-let chart = null;
+const CACHE = {};
+let currentTab = 'eln', currentMetric = 'casos', chart = null;
 
 function initChart() {
   const ctx = document.getElementById('chart').getContext('2d');
   chart = new Chart(ctx, {
     type: 'line',
-    data: { labels: [], datasets: [] },
+    data: {labels:[],datasets:[]},
     options: {
-      responsive: true,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { display: false },
-        tooltip: { backgroundColor:'#161b22', borderColor:'#30363d', borderWidth:1, titleColor:'#e6edf3', bodyColor:'#8b949e' }
+      responsive:true,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{display:false},
+        tooltip:{backgroundColor:'#161b22',borderColor:'#30363d',borderWidth:1,titleColor:'#e6edf3',bodyColor:'#8b949e'}
       },
-      scales: {
-        x: { grid:{ color:'#21262d' }, ticks:{ color:'#8b949e', font:{ size:10 }, maxRotation:45 } },
-        y: {
-          grid:{ color:'#21262d' },
-          ticks:{ color:'#8b949e', font:{ size:10 }, callback: v => v>=1000 ? (v/1000).toFixed(0)+'k' : v },
-          beginAtZero:true
-        }
+      scales:{
+        x:{grid:{color:'#21262d'},ticks:{color:'#8b949e',font:{size:10},maxRotation:45}},
+        y:{grid:{color:'#21262d'},ticks:{color:'#8b949e',font:{size:10},callback:v=>v>=1000?(v/1000).toFixed(0)+'k':v},beginAtZero:true}
       }
     }
   });
 }
 
-async function loadDataset(tab) {
-  if (LOADED[tab]) return LOADED[tab];
-  const res  = await fetch('data_' + tab + '.json');
-  const data = await res.json();
-  // Build rows
-  data._rows  = data.keys.map((k,i) => ({ año:k[0], mes:k[1], di:k[2], mi:k[3], v:data.vals[i] }));
-  data._years = [...new Set(data._rows.map(r=>r.año))].sort((a,b)=>a-b);
-  // Merge meta
-  Object.assign(data, META[tab]);
-  LOADED[tab] = data;
-  return data;
+async function loadTab(tab) {
+  if (CACHE[tab]) return CACHE[tab];
+  const r = await fetch('data_' + tab + '.json');
+  const d = await r.json();
+  // Build row index from flat arrays
+  const n = d.a.length;
+  d._rows = new Array(n);
+  for (let i=0;i<n;i++) d._rows[i] = {año:d.a[i],mes:d.ms[i],di:d.di[i],mi:d.mi[i],v:d.v[i]};
+  d._years = [...new Set(d.a)].sort((a,b)=>a-b);
+  Object.assign(d, META[tab]);
+  CACHE[tab] = d;
+  return d;
 }
 
 function getVal(row, ds) {
-  if (ds.tipo === 'mas') {
-    const fi = ds.fields.indexOf(currentMetric);
+  if (ds.tipo==='mas') {
+    const fi = (ds.fields||['casos']).indexOf(currentMetric);
     return Array.isArray(row.v) ? (row.v[fi]||0) : 0;
   }
-  return typeof row.v === 'number' ? row.v : row.v[0];
+  return typeof row.v==='number' ? row.v : (Array.isArray(row.v) ? row.v[0] : 0);
 }
 
 function setMetric(m) {
   currentMetric = m;
   document.getElementById('mbtn-casos').classList.toggle('active',    m==='casos');
   document.getElementById('mbtn-victimas').classList.toggle('active', m==='victimas');
-  document.getElementById('totalLbl').textContent = m==='casos' ? 'Total casos' : 'Total víctimas';
+  document.getElementById('totalLbl').textContent = m==='casos'?'Total casos':'Total víctimas';
   render();
 }
 
 function populateFilters(ds) {
-  const yf = document.getElementById('yearFrom');
-  const yt = document.getElementById('yearTo');
+  const yf=document.getElementById('yearFrom'), yt=document.getElementById('yearTo');
   yf.innerHTML=''; yt.innerHTML='';
-  ds._years.forEach(y => { yf.add(new Option(y,y)); yt.add(new Option(y,y)); });
-  yf.value = ds._years[0];
-  yt.value = ds._years[ds._years.length-1];
-  const mesEl = document.getElementById('mes');
+  ds._years.forEach(y=>{yf.add(new Option(y,y));yt.add(new Option(y,y));});
+  yf.value=ds._years[0]; yt.value=ds._years[ds._years.length-1];
+  const mesEl=document.getElementById('mes');
   mesEl.innerHTML='<option value="">Todos</option>';
-  MESES.forEach((m,i) => { if(i>0) mesEl.add(new Option(m,i)); });
-  const deptEl = document.getElementById('departamento');
+  MESES.forEach((m,i)=>{if(i>0) mesEl.add(new Option(m,i));});
+  const deptEl=document.getElementById('departamento');
   deptEl.innerHTML='<option value="">Todos</option>';
-  ds.deptos.forEach(d => deptEl.add(new Option(d,d)));
+  ds.deptos.forEach(d=>deptEl.add(new Option(d,d)));
   document.getElementById('municipio').innerHTML='<option value="">Todos</option>';
 }
 
 async function switchTab(tab) {
   currentTab = tab;
-  // Update tab styles immediately
-  Object.keys(META).forEach(t => {
-    const btn = document.getElementById('btn-'+t);
-    btn.style.background = t===tab ? META[t].tabBg : '';
-    btn.style.color      = t===tab ? META[t].accent2 : '';
-  });
   const m = META[tab];
-  document.querySelector('header').style.borderColor = m.accent;
-  document.getElementById('header-title').textContent = m.title;
-  document.getElementById('header-sub').textContent   = m.sub;
-  document.documentElement.style.setProperty('--accent',  m.accent);
-  document.documentElement.style.setProperty('--accent2', m.accent2);
-  document.getElementById('metricToggle').classList.toggle('visible', m.tipo==='mas');
-  // Show loading
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('chart').style.display   = 'none';
-  // Load data
-  const ds = await loadDataset(tab);
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('chart').style.display   = 'block';
-  document.getElementById('totalLbl').textContent  = m.tipo==='mas'
-    ? (currentMetric==='casos' ? 'Total casos' : 'Total víctimas') : m.lbl;
+  // Style tabs
+  Object.keys(META).forEach(t=>{
+    const b=document.getElementById('btn-'+t);
+    b.style.background=t===tab?META[t].tabBg:'';
+    b.style.color=t===tab?META[t].accent2:'';
+  });
+  document.querySelector('header').style.borderColor=m.accent;
+  document.getElementById('header-title').textContent=m.title;
+  document.getElementById('header-sub').textContent=m.sub;
+  document.documentElement.style.setProperty('--accent',m.accent);
+  document.documentElement.style.setProperty('--accent2',m.accent2);
+  document.getElementById('metricToggle').classList.toggle('visible',m.tipo==='mas');
+  // Show spinner
+  document.getElementById('loading').style.display='flex';
+  document.getElementById('nodata').style.display='none';
+  document.getElementById('chart').style.opacity='0';
+  // Load
+  const ds = await loadTab(tab);
+  document.getElementById('loading').style.display='none';
+  document.getElementById('chart').style.opacity='1';
+  document.getElementById('totalLbl').textContent=m.tipo==='mas'
+    ?(currentMetric==='casos'?'Total casos':'Total víctimas'):m.lbl;
   populateFilters(ds);
   render();
 }
 
-document.getElementById('departamento').addEventListener('change', async () => {
-  const ds   = LOADED[currentTab];
-  if (!ds) return;
-  const dept = document.getElementById('departamento').value;
-  const muniEl = document.getElementById('municipio');
+document.getElementById('departamento').addEventListener('change', ()=>{
+  const ds=CACHE[currentTab]; if(!ds) return;
+  const dept=document.getElementById('departamento').value;
+  const muniEl=document.getElementById('municipio');
   muniEl.innerHTML='<option value="">Todos</option>';
-  if (dept) {
-    const di = ds.deptos.indexOf(dept);
-    if (di >= 0) ds.deptMuni[di].forEach(m => muniEl.add(new Option(m,m)));
+  if(dept){
+    const di=ds.deptos.indexOf(dept);
+    if(di>=0) ds.dm[di].forEach(m=>muniEl.add(new Option(m,m)));
   }
   render();
 });
 
 function render() {
-  const ds = LOADED[currentTab];
-  if (!ds || !chart) return;
+  const ds=CACHE[currentTab];
+  if(!ds||!chart) return;
+  const yfrom=+document.getElementById('yearFrom').value;
+  const yto=+document.getElementById('yearTo').value;
+  const mes=+document.getElementById('mes').value||0;
+  const dept=document.getElementById('departamento').value;
+  const muni=document.getElementById('municipio').value;
+  const di=dept?ds.deptos.indexOf(dept):-1;
+  const mi=(dept&&muni)?(ds.dm[di]?ds.dm[di].indexOf(muni):-1):-1;
 
-  const yfrom = +document.getElementById('yearFrom').value;
-  const yto   = +document.getElementById('yearTo').value;
-  const mes   = +document.getElementById('mes').value || 0;
-  const dept  =  document.getElementById('departamento').value;
-  const muni  =  document.getElementById('municipio').value;
-  const di    = dept ? ds.deptos.indexOf(dept) : -1;
-  const mi    = (dept && muni) ? (ds.deptMuni[di] ? ds.deptMuni[di].indexOf(muni) : -1) : -1;
+  const rows=ds._rows;
+  const filtered=[];
+  for(let i=0,n=rows.length;i<n;i++){
+    const r=rows[i];
+    if(r.año>=yfrom&&r.año<=yto&&(mes===0||r.mes===mes)&&(di<0||r.di===di)&&(mi<0||r.mi===mi))
+      filtered.push(r);
+  }
 
-  const filtered = ds._rows.filter(r =>
-    r.año >= yfrom && r.año <= yto &&
-    (mes===0 || r.mes===mes) &&
-    (di<0    || r.di===di)   &&
-    (mi<0    || r.mi===mi)
-  );
-
-  const nodata = document.getElementById('nodata');
-  if (filtered.length === 0) {
+  const nodata=document.getElementById('nodata');
+  if(filtered.length===0){
     nodata.style.display='flex';
     chart.data.labels=[]; chart.data.datasets=[]; chart.update();
-    ['totalVal','peakYear','peakVal','deptoCount'].forEach(id =>
-      document.getElementById(id).textContent = id==='peakYear' ? '–' : '0');
+    ['totalVal','peakYear','peakVal','deptoCount'].forEach(id=>
+      document.getElementById(id).textContent=id==='peakYear'?'–':'0');
     return;
   }
   nodata.style.display='none';
 
-  let labels, values, titleLabel;
-  if (yfrom===yto && mes===0) {
-    const byMonth={};
-    for(let m=1;m<=12;m++) byMonth[m]=0;
-    filtered.forEach(r=>{ byMonth[r.mes]=(byMonth[r.mes]||0)+getVal(r,ds); });
+  let labels,values,titleLabel;
+  if(yfrom===yto&&mes===0){
+    const bm={}; for(let m=1;m<=12;m++) bm[m]=0;
+    filtered.forEach(r=>{bm[r.mes]=(bm[r.mes]||0)+getVal(r,ds);});
     labels=[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>MESES[m]);
-    values=[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>byMonth[m]);
+    values=[1,2,3,4,5,6,7,8,9,10,11,12].map(m=>bm[m]);
     titleLabel=ds.title+` por mes – ${yfrom}`;
   } else {
-    const byYear={};
-    filtered.forEach(r=>{ byYear[r.año]=(byYear[r.año]||0)+getVal(r,ds); });
-    const ys=Object.keys(byYear).map(Number).sort((a,b)=>a-b);
-    labels=ys.map(String); values=ys.map(y=>byYear[y]);
+    const by={};
+    filtered.forEach(r=>{by[r.año]=(by[r.año]||0)+getVal(r,ds);});
+    const ys=Object.keys(by).map(Number).sort((a,b)=>a-b);
+    labels=ys.map(String); values=ys.map(y=>by[y]);
     titleLabel=ds.title+' por año';
   }
 
   document.getElementById('chartTitle').textContent=titleLabel;
   const total=filtered.reduce((s,r)=>s+getVal(r,ds),0);
-  const byYearAll={};
-  filtered.forEach(r=>{ byYearAll[r.año]=(byYearAll[r.año]||0)+getVal(r,ds); });
-  const peakY=Object.entries(byYearAll).sort((a,b)=>b[1]-a[1])[0];
+  const byY={};
+  filtered.forEach(r=>{byY[r.año]=(byY[r.año]||0)+getVal(r,ds);});
+  const pk=Object.entries(byY).sort((a,b)=>b[1]-a[1])[0];
 
-  document.getElementById('totalVal').textContent   =Math.round(total).toLocaleString('es-CO');
-  document.getElementById('peakYear').textContent   =peakY?peakY[0]:'–';
-  document.getElementById('peakVal').textContent    =peakY?Math.round(+peakY[1]).toLocaleString('es-CO'):'0';
-  document.getElementById('deptoCount').textContent =new Set(filtered.map(r=>r.di)).size;
+  document.getElementById('totalVal').textContent=Math.round(total).toLocaleString('es-CO');
+  document.getElementById('peakYear').textContent=pk?pk[0]:'–';
+  document.getElementById('peakVal').textContent=pk?Math.round(+pk[1]).toLocaleString('es-CO'):'0';
+  document.getElementById('deptoCount').textContent=new Set(filtered.map(r=>r.di)).size;
 
-  const unitLabel=ds.tipo==='mas'?(currentMetric==='casos'?'casos':'víctimas'):ds.unit;
-  chart.options.plugins.tooltip.callbacks.label=c=>` ${Math.round(c.parsed.y).toLocaleString('es-CO')} ${unitLabel}`;
+  const ul=ds.tipo==='mas'?(currentMetric==='casos'?'casos':'víctimas'):ds.unit;
+  chart.options.plugins.tooltip.callbacks.label=c=>` ${Math.round(c.parsed.y).toLocaleString('es-CO')} ${ul}`;
 
   const ctx2=document.getElementById('chart').getContext('2d');
   const grad=ctx2.createLinearGradient(0,0,0,260);
@@ -316,19 +294,18 @@ function render() {
 
   chart.data.labels=labels;
   chart.data.datasets=[{
-    data:values, borderColor:ds.accent, backgroundColor:grad,
-    borderWidth:2.5, pointBackgroundColor:ds.accent2,
-    pointRadius:labels.length>15?2:4, pointHoverRadius:6,
-    fill:true, tension:0.35
+    data:values,borderColor:ds.accent,backgroundColor:grad,
+    borderWidth:2.5,pointBackgroundColor:ds.accent2,
+    pointRadius:labels.length>15?2:4,pointHoverRadius:6,
+    fill:true,tension:0.35
   }];
   chart.update('active');
 }
 
 ['yearFrom','yearTo','mes','municipio'].forEach(id=>
-  document.getElementById(id).addEventListener('change', render));
+  document.getElementById(id).addEventListener('change',render));
 
-// Init after DOM + Chart.js ready
-window.addEventListener('load', () => {
+window.addEventListener('load',()=>{
   initChart();
   switchTab('eln');
 });
